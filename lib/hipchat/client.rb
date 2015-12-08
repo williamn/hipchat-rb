@@ -66,6 +66,21 @@ module HipChat
       response.parsed_response
     end
 
+    def invite_user(email, name, title=nil)
+      response = self.class.post(
+        @api.invite_user_config[:url],
+        :query => { :auth_token => @token },
+        :body => {
+          :name => name,
+          :email => email,
+          :title => title
+          }.send(@api.invite_user_config[:body_format]),
+        :headers => @api.headers
+      )
+
+      response.parsed_response
+    end
+
     def user(name)
       HipChat::User.new(@token, { :user_id => name, :api_version => @api_version, :server_url => @options[:server_url] })
     end

@@ -398,17 +398,30 @@ describe "HipChat (API V2)" do
   describe "#invite" do
     include_context "HipChatV2"
 
-    it "successfully with user_id" do
-      mock_successful_invite()
+    it "successfully invite user_id to a room" do
+      mock_successful_invite_to_room()
 
       expect(room.invite("1234")).to be_truthy
     end
 
-    it "successfully with custom parameters" do
-      mock_successful_invite({:user_id => "321", :reason => "A great reason"})
+    it "successfully successfully invite user_id to a room with custom parameters" do
+      mock_successful_invite_to_room({:user_id => "321", :reason => "A great reason"})
 
       expect(room.invite("321", "A great reason")).to be_truthy
     end
+
+    it "successfully invite user to a group" do
+      mock_successful_invite_user("email@example.com", "A User")
+
+      expect(subject.invite_user("email@example.com", "A User")['name']).to eq("A User")
+    end
+
+    it "successfully invite user with title to a group" do
+      mock_successful_invite_user("email@example.com", "A User", "The User")
+
+      expect(subject.invite_user("email@example.com", "A User", "The User")['title']).to eq("The User")
+    end
+
   end
 
   describe "#add_member" do

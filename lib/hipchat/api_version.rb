@@ -58,6 +58,15 @@ module HipChat
         }[version]
       end
 
+      def invite_user_config
+        {
+          'v2' => {
+            :url => '/invite/user',
+            :body_format => :to_json
+          }
+        }[version]
+      end
+
       def create_user_config
         {
           'v1' => {

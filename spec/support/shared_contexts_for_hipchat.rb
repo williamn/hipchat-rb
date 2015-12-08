@@ -209,6 +209,19 @@ shared_context "HipChatV2" do
                                           :headers => {})
   end
 
+  def mock_successful_invite_user(email, name, title=nil)
+    stub_request(
+      :post,
+      "https://api.hipchat.com/v2/invite/user")
+    .with(
+      :query => {:auth_token => "blah"},
+      :body => {:name => name, :email => email, :title => title},
+      :headers => {'Accept'=>'application/json', 'Content-Type'=>'application/json'})
+    .to_return(
+      :status => 200,
+      :body => {:name => name, :email => email, :title => title}.to_json,
+      :headers => {})
+  end
 
   def mock_successful_get_room(room_id="1234")
     stub_request(:get, "https://api.hipchat.com/v2/room/#{room_id}").with(
@@ -256,7 +269,7 @@ shared_context "HipChatV2" do
                     :headers => {})
   end
 
-  def mock_successful_invite(options={})
+  def mock_successful_invite_to_room(options={})
     options = {:user_id => "1234"}.merge(options)
     stub_request(:post, "https://api.hipchat.com/v2/room/Hipchat/invite/#{options[:user_id]}").with(
       :query => {:auth_token => "blah"},
